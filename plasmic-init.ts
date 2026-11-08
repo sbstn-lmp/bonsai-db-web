@@ -35,8 +35,14 @@ PLASMIC.registerGlobalContext(SupabaseAuthProvider, {
         },
       ],
     },
+    
     logout: {
       displayName: "Logout",
+      parameters: [],
+    },
+
+    clearLoginError: {
+      displayName: "Clear login error",
       parameters: [],
     },
   },
