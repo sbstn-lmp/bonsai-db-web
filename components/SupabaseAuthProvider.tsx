@@ -45,9 +45,11 @@ export function SupabaseAuthProvider({
   }, [supabase]);
 
   const login = React.useCallback(
-    async (email: string, password: string) => {
-      console.log("[auth] login function called");
-
+    async (
+      email: string,
+      password: string,
+      returnTo?: string
+    ) => {
       setLoginErrorCode(null);
 
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -58,6 +60,14 @@ export function SupabaseAuthProvider({
       if (error) {
         setLoginErrorCode(error.code ?? "unknown");
         return null;
+      }
+
+      if (
+        returnTo &&
+        returnTo.startsWith("/") &&
+        !returnTo.startsWith("//")
+      ) {
+        window.location.assign(returnTo);
       }
 
       return data;

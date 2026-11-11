@@ -34,6 +34,10 @@ PLASMIC.registerGlobalContext(SupabaseAuthProvider, {
           name: "password",
           type: "string",
         },
+        {
+          name: "returnTo",
+          type: "string",
+        },
       ],
     },
 
