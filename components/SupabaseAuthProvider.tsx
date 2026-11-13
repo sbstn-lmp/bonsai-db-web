@@ -16,7 +16,8 @@ export function SupabaseAuthProvider({
 
   const [session, setSession] = React.useState<Session | null>(null);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [loginErrorCode, setLoginErrorCode] = React.useState<string | null>(null);
+  const [loginErrorCode, setLoginErrorCode] =
+    React.useState<string | null>(null);
 
   React.useEffect(() => {
     let mounted = true;
@@ -44,7 +45,11 @@ export function SupabaseAuthProvider({
   }, [supabase]);
 
   const login = React.useCallback(
-    async (email: string, password: string) => {
+    async (
+      email: string,
+      password: string,
+      returnTo?: string
+    ) => {
       setLoginErrorCode(null);
 
       const { data, error } = await supabase.auth.signInWithPassword({
@@ -55,6 +60,14 @@ export function SupabaseAuthProvider({
       if (error) {
         setLoginErrorCode(error.code ?? "unknown");
         return null;
+      }
+
+      if (
+        returnTo &&
+        returnTo.startsWith("/") &&
+        !returnTo.startsWith("//")
+      ) {
+        window.location.assign(returnTo);
       }
 
       return data;
@@ -95,7 +108,10 @@ export function SupabaseAuthProvider({
   );
 
   return (
-    <GlobalActionsProvider contextName="SupabaseAuthProvider" actions={actions}>
+    <GlobalActionsProvider
+      contextName="SupabaseAuthProvider"
+      actions={actions}
+    >
       <DataProvider name="auth" data={authData}>
         {children}
       </DataProvider>
